@@ -3,7 +3,7 @@ from typing import Optional
 from sqlalchemy.orm import Session
 from app.repositories.user_repository import UserRepository
 from app.schemas.user import UserCreate, UserLogin, Token, UserResponse
-from app.utils.security import create_access_token, create_refresh_token
+from app.utils.security import create_access_token, create_refresh_token, verify_password, get_password_hash
 from datetime import timedelta
 from app.config.settings import settings
 
