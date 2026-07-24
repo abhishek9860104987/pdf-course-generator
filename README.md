@@ -267,6 +267,33 @@ For detailed deployment instructions, see [DEPLOYMENT.md](./DEPLOYMENT.md)
 - `GET /api/progress/{course_id}` - Get course progress
 - `GET /api/progress/` - Get all progress
 
+
+
+
+It is designed as an AI-powered PDF to E-Course Learning Platform. Here is exactly where and how Generative AI is used within the codebase:
+
+1. Course Outline & Lesson Generation (course_generation_service.py)
+What it does: When a user uploads a PDF (like a textbook or research paper), the system processes the raw text.
+Where AI is used: It calls the Groq API (configured in groq_client.py using LLM models like Llama 3) to dynamically write structured educational courses. It generates:
+Course titles, descriptions, and difficulty levels.
+Modular chapters.
+Deep-dive lesson contents and key takeaways directly derived from the uploaded PDF text.
+2. Auto-Generating Interactive Quizzes (quiz_service.py)
+What it does: To test user knowledge, the platform offers quizzes for each course.
+Where AI is used: It leverages Groq's LLMs in JSON mode to automatically create multiple-choice questions (MCQs), options, correct answers, and detailed explanations based on the generated course content.
+3. AI Study Chatbot using RAG (chatbot_service.py & vector_store.py)
+What it does: Users can chat with an AI assistant to clarify doubts about the uploaded course material.
+Where AI is used: It uses a technique called RAG (Retrieval-Augmented Generation):
+Vector Embeddings: The system uses sentence-transformers to turn PDF text into mathematical vectors.
+Vector Search: It stores these vectors using a local FAISS (Facebook AI Similarity Search) index. When a user asks a question, FAISS finds the most relevant segments of the PDF.
+LLM Synthesis: The retrieved PDF segments are sent as context to the Groq LLM to generate an accurate, hallucination-free response matching only the course content.
+1:56 AM
+
+
+
+
+
+
 ### Dashboard
 - `GET /api/dashboard/` - Get dashboard statistics
 - `GET /api/dashboard/course/{id}/progress` - Get detailed course progress
