@@ -1,3 +1,7 @@
+**Deployed Link:-** https://pdf-course-generator-f4js7pcwp-garmi-squad.vercel.app
+**Swagger API docs page:-** https://pdf-course-generator.onrender.com/docs
+
+ 
 # AI PDF to E-Course Learning Platform
 
 A production-ready full-stack application that transforms PDF documents into interactive, AI-powered learning courses.
