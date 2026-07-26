@@ -6,10 +6,34 @@ from app.config.settings import settings
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return _bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
+    """Verify password against stored hash. Supports both bcrypt and argon2 hashes."""
+    if not hashed_password:
+        return False
+
+    # Detect hash type by prefix
+    if hashed_password.startswith("$argon2"):
+        # Legacy argon2 hash — use argon2-cffi to verify
+        try:
+            from argon2 import PasswordHasher
+            from argon2.exceptions import VerifyMismatchError, VerificationError, InvalidHashError
+            ph = PasswordHasher()
+            try:
+                return ph.verify(hashed_password, plain_password)
+            except (VerifyMismatchError, VerificationError, InvalidHashError):
+                return False
+        except ImportError:
+            # argon2-cffi not installed — can't verify legacy hash
+            return False
+
+    # Default: bcrypt hash
+    try:
+        return _bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
+    except Exception:
+        return False
 
 
 def get_password_hash(password: str) -> str:
+    """Hash password using bcrypt."""
     # Bcrypt has a 72-byte limit, truncate if necessary
     pwd_bytes = password.encode('utf-8')
     if len(pwd_bytes) > 72:

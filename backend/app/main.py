@@ -17,9 +17,17 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="AI PDF to E-Course Platform", version="1.0.0")
 
+# CORS: allow_origins=["*"] + allow_credentials=True is invalid in browsers.
+# Use explicit origins from settings (CORS_ORIGINS env var).
+allowed_origins = [
+    origin.strip()
+    for origin in settings.cors_origins.split(",")
+    if origin.strip()
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
